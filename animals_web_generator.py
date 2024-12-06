@@ -1,12 +1,19 @@
 import json
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(message)s')
 
 def load_data(file_path):
     """Loads a JSON file"""
+    logging.debug(f"Loading data from {file_path}...")
     with open(file_path, "r") as handle:
-        return json.load(handle)
+        data = json.load(handle)
+    logging.debug(f"Loaded {len(data)} animals.")
+    return data
 
 def generate_html(animals_data):
     """Generates HTML for animal cards"""
+    logging.debug("Generating HTML content for animals...")
     html = ""
     for animal in animals_data:
         html += '<li class="cards__item">'
@@ -27,18 +34,23 @@ def generate_html(animals_data):
         
         html += '</p></li>'
     
+    logging.debug(f"Generated HTML for {len(animals_data)} animals.")
     return html
 
 def write_html(html_content):
     """Inserts animal HTML into a template"""
+    logging.debug("Reading template HTML...")
     with open('animals_template.html', 'r') as template_file:
         template = template_file.read()
     
     # Replace placeholder with generated HTML content
+    logging.debug("Replacing placeholder with generated animal HTML...")
     html_output = template.replace('__REPLACE_ANIMALS_INFO__', html_content)
     
+    logging.debug("Writing to animals.html...")
     with open('animals.html', 'w') as output_file:
         output_file.write(html_output)
+    logging.debug("HTML file written to animals.html.")
 
 def main():
     # Load the animal data from the JSON file
@@ -51,4 +63,5 @@ def main():
     write_html(html_content)
 
 if __name__ == "__main__":
+    logging.debug("Script is starting...")
     main()
